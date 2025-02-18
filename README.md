@@ -15,15 +15,23 @@ creating Python Virtual Environment
 
 (path_venv) $ pip3 install requests psutil
 
+- install lm-sensors and scaning the server 
+
+(path_venv) $ sudo install lm-sensors
+(path_venv) $ sudo sensors-detect
+
+Note : some Sensors maybe wont detected if you using VM but dont wory the script will force to run
+
 - edit the .py file ( token, chat_id telegram, path file and log file where you want to place) 
 ----------------------------------------------------------------------------------------------------------------------------
 - The Next Step is open and edit the self-watchdog-monitor.service, change with the path where you place the .py script and
 Where the Python Environment was your created.
 
+- And also dont forget change user and the group ont .service script
 - After editing the script, now you must Move the .service file to /etc/systemd/system
 
-- reload the daemon
-- enable the script
+- reload the daemon 
+- enable the script 
 - start 
 - done
 

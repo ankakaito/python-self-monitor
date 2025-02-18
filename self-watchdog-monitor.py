@@ -137,10 +137,19 @@ class SystemMonitor:
             return "N/A"
 
     def get_disk_usage(self):
-        """Get disk usage for all mounted partitions"""
+        """Get disk usage for all mounted partitions excluding /snap"""
         disk_usage = {}
         for partition in psutil.disk_partitions():
             try:
+                # Skip if mountpoint is or contains /snap
+                if '/snap' in partition.mountpoint:
+                    continue
+                    
+                # Skip if the partition's root path contains /snap
+                root_path = os.path.realpath(partition.mountpoint)
+                if '/snap' in root_path:
+                    continue
+
                 usage = psutil.disk_usage(partition.mountpoint)
                 disk_usage[partition.mountpoint] = {
                     'percent': usage.percent,
@@ -253,11 +262,11 @@ class SystemMonitor:
                 message_type="alert"
             )
 
-        # Check Disk
+        # Check Disk (excluding /snap)
         for mountpoint, usage in disk_usage.items():
             if usage['percent'] >= self.threshold:
                 self.send_telegram_message(
-                    "High Disk Usage Alert",
+                    f"High Disk Usage Alert for {mountpoint}",
                     message_type="alert"
                 )
                 break
