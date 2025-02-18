@@ -1,0 +1,18 @@
+[Unit]
+Description=System Resource Monitor
+After=network.target
+
+[Service]
+Type=simple
+SyslogIdentifier=self-watchdog-monitor
+PermissionsStartOnly=true
+User=docker
+Group=docker
+ExecStart=path_your_venv/bin/python3 path_where_your_place_the_script/self-watchdog-monitor.py
+StandardOutput=journal+console
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+
